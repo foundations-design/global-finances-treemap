@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Global Asset Values Treemap</title>
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/hierarchy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+    <style>
+      body,
+      html {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+      }
+      #chartdiv {
+        width: 100%;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Global Asset Values Treemap (2025 Estimate)</h2>
+    <div id="chartdiv"></div>
+
+    <script>
+      am5.ready(function () {
+        var root = am5
+          .Root
+          .new("chartdiv");
+
+        root.setThemes([am5themes_Animated.new(root)]);
+
+        var data = [
+          {
+            name: "Global Assets",
+            children: [
+              {
+                name: "Equities",
+                value: 122
+              }, {
+                name: "Money Supply (M2)",
+                value: 94.5
+              }, {
+                name: "Bonds",
+                value: 80
+              }, {
+                name: "Gold",
+                value: 22
+              }, {
+                name: "Real Estate",
+                value: 4.1
+              }, {
+                name: "Bitcoin",
+                value: 2.1
+              }, {
+                name: "Crypto (ex-BTC)",
+                value: 1.5
+              }, {
+                name: "Cars, Art & Collectibles",
+                value: 0.547
+              }
+            ]
+          }
+        ];
+
+        var container = root
+          .container
+          .children
+          .push(am5.Container.new(root, {
+            width: am5.percent(100),
+            height: am5.percent(100),
+            layout: root.verticalLayout
+          }));
+
+        var series = container
+          .children
+          .push(am5hierarchy.Treemap.new(root, {
+            downDepth: 1,
+            upDepth: 0,
+            initialDepth: 1,
+            valueField: "value",
+            categoryField: "name",
+            childDataField: "children",
+            nodePaddingOuter: 20,
+            nodePaddingInner: 10
+          }));
+        series
+          .data
+          .setAll(data);
+        series.set("selectedDataItem", series.dataItems[0]);
+
+        container
+          .children
+          .unshift(am5hierarchy.BreadcrumbBar.new(root, {series: series}));
+      });
+    </script>
+  </body>
+</html>
